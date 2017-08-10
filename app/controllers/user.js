@@ -1,3 +1,5 @@
+import xss from 'xss'
+
 import User from '../models/user'
 class UserController  {
 
