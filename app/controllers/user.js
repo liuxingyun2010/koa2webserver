@@ -2,6 +2,13 @@ import xss from 'xss'
 
 import User from '../models/user'
 class UserController  {
+	
+	// 登录
+	// 验证用户的账号密码
+	static async login(ctx){
+
+	}
+
 
 	// 查询
 	static async find(ctx) {

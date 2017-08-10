@@ -24,7 +24,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    nickname: {
+    username: {
         type: String,
         required: true
     },
@@ -41,10 +41,10 @@ const userSchema = new Schema({
     	type: Number,
     	required: true
     },
-    token: {
-    	type: String,
-    	required: true
-    },
+    // token: {
+    // 	type: String,
+    // 	required: true
+    // },
     password: {
     	type: String,
     	required: true
