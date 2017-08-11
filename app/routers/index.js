@@ -1,5 +1,5 @@
 import routesLoader from '../utils/routesLoader'
-import userRoute from './router'
+import userRoute from './user'
 
 
 export default function(app) {

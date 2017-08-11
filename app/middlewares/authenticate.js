@@ -1,24 +1,19 @@
 import jwt from 'jsonwebtoken'
-import { jwtKey } from './config'
+import { jwtKey } from '../config'
 
 export default (ctx) => {
     if (ctx.request.body.password === 'password') {
-        ctx.status = 200;
-        ctx.body = {
+        return ctx.success({
             data: {
                 token: jwt.sign({
-                    uid: 'admin',
-                    nickname: 'xxx' 
-                }, 'jwtKey')
+                    name: 'hello koa'
+                }, jwtKey)
             },
             msg: '登录成功',
-        };
+        })
     } else {
-        ctx.status = 401;
-        ctx.body = {
-            data: null,
+        return ctx.error({
             msg: '登录失败，账号或者密码不正确',
-        };
+        })
     }
-    return ctx;
 }
