@@ -14,15 +14,14 @@ class UserController  {
 		authenticate(ctx)
 	}
 
-
 	// 查询
 	static async find(ctx) {
-		console.log(ctx.header.authorization)
-		const token = ctx.header.authorization.split(' ')[1]
-		const x = jwt.verify(token, jwtKey)
 		
-    	// ctx.body = await User.findOne()
-    	ctx.body = x
+		// const token = ctx.header.authorization.split(' ')[1]
+		// const x = jwt.verify(token, jwtKey)
+		
+  //   	ctx.body = await User.findOne()
+  		ctx.body = 'this is test'
   	}
 
 	// 添加用户

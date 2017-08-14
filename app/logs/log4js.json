@@ -1,0 +1,36 @@
+ {
+     "appenders": [{
+         "type": "console" 
+     }, {
+         "type": "clustered",  
+         "appenders": [{
+            "category":"resLogger",
+            "type": "dateFile",
+            "pattern": "-yyyy-MM-dd",
+            "filename": "response.log"
+        },{ 
+             "type": "dateFile", 
+             "filename": "http.log", 
+             "pattern": "-yyyy-MM-dd",
+             "category": "http" 
+         }, { 
+             "type": "dateFile", 
+             "filename": "app.log", 
+             "maxLogSize": 10485760, 
+             "pattern": "-yyyy-MM-dd", 
+             "numBackups": 5 
+         }, {
+             "type": "logLevelFilter", 
+             "level": "ERROR", 
+             "appender": {
+                 "type": "dateFile",
+                 "pattern": "-yyyy-MM-dd",
+                 "filename": "errors.log"
+             }
+         }]
+     }],
+    "levels": {
+        "errorLogger":"ERROR",
+        "resLogger":"ALL"
+    }
+ }

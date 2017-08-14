@@ -11,7 +11,7 @@ router.prefix(`/${baseApi}/${api}`)
 
 // 登录接口，返回json web token
 router.post('/login', userHandler.login)
-	.get('/', jwt, userHandler.find)
+	.get('/', userHandler.find)
 	.post('/add', jwt, userHandler.addUser)
 
 export default router
