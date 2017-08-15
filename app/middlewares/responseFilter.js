@@ -10,14 +10,26 @@
 //     file: 'error.log',
 //     path: __dirname
 // });
-import log4js from 'koa-log4'
-const logger = log4js.getLogger('app')
-// import logUtil from '../logs/log_util'
+// import log4js from 'koa-log4'
+import logUtil from '../logs/log_util'
+
 export default async(ctx, next) => {
+    const start = new Date();
+    var ms
+    
     try {
         await next();
+
+        ms = new Date() - start;
+
+        //记录响应日志
+        logUtil.logResponse(ctx, ms);
+
     } catch (err) {
-        logger.error(err.stack)
+        ms = new Date() - start;
+
+        //记录异常日志
+        logUtil.logError(ctx, err, ms);
         
         if (!err) {
             return ctx.error({
@@ -34,6 +46,12 @@ export default async(ctx, next) => {
             return ctx.error({
                 msg: '用户未授权',
                 code: -1
+            })
+        }
+        
+        if(err.status === 405){
+            return ctx.error({
+                msg: '请求方式错误'
             })
         }
         

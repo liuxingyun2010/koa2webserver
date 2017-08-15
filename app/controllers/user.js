@@ -11,7 +11,7 @@ class UserController  {
 	// 登录
 	// 验证用户的账号密码
 	static async login(ctx){
-		authenticate(ctx)
+		return authenticate(ctx)
 	}
 
 	// 查询

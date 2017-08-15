@@ -10,18 +10,15 @@
 * @ 调用ctx.error()   响应错误
 * @ 调用ctx.success()  响应成功
 */ 
-import log4js from 'koa-log4'
-const logger = log4js.getLogger('app')
-// import logUtil from '../logs/log_util'
+// import log4js from 'koa-log4'
+// const logger = log4js.getLogger('app')
 
 export default async (ctx, next) => {
     ctx.error = ({ data, msg, code = 0 }) => {
-    	logger.error(ctx)
        	ctx.body = { code, msg, data};
     }
-    ctx.success = ({ data, msg }) => {
-    	logger.info(ctx.response)
 
+    ctx.success = ({ data, msg }) => {
         ctx.body = { code: 1, msg, data };
     }
     await next()

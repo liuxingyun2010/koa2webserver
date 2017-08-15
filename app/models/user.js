@@ -28,19 +28,20 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    email: {
-    	unique: true,
-    	type: String
-    },
-    gid: {
-    	type: Number,
-    	default: 0,
-    	required: true
-    },
-    uid: {
-    	type: Number,
-    	required: true
-    },
+    // email: {
+    // 	unique: true,
+    // 	type: String
+    // },
+    // gid: {
+    // 	type: Number,
+    // 	default: 0,
+    // 	required: true
+    // },
+    // uid: {
+    //     unique: true,
+    // 	type: Number,
+    // 	required: true
+    // },
     // token: {
     // 	type: String,
     // 	required: true
@@ -49,19 +50,19 @@ const userSchema = new Schema({
     	type: String,
     	required: true
     },
-    role: {
-    	type: Number,
-    	required:true
-    },
-    createTime: {
-    	type: String,
-    	required: true,
-    	default: Date.now()
-    },
-    updateTIme: {
-    	type: String,
-    	default: Date.now()
-    }
+    // role: {
+    // 	type: Number,
+    // 	required:true
+    // },
+    // createTime: {
+    // 	type: String,
+    // 	required: true,
+    // 	default: Date.now()
+    // },
+    // updateTIme: {
+    // 	type: String,
+    // 	default: Date.now()
+    // }
 })
 
 export default mongoose.model('User', userSchema)
