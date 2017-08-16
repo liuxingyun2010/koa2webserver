@@ -34,14 +34,17 @@ export default async (ctx) => {
     
     const keep_user = 604800000*54; //一年
     const token = jwt.sign({
-        username: username
+        id: findUser._id,
+        username: username,
+        role: findUser.role
     }, jwtKey)
 
     ctx.cookies.set('_app_token_', token, { maxAge: keep_user, httpOnly: false })
 
     return ctx.success({
         data: {
-            token: token
+            token: token,
+            role: findUser.role
         },
         msg: '登录成功'
     })

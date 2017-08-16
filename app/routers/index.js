@@ -1,5 +1,7 @@
 import routesLoader from '../utils/routesLoader'
 import userRoute from './user'
+import groupRoute from './group'
+
 
 
 export default function(app) {
@@ -14,6 +16,10 @@ export default function(app) {
 	// 	})
 	// })
 	app.use(userRoute.routes()).use(userRoute.allowedMethods({
+		throw: true,
+	}))
+
+	app.use(groupRoute.routes()).use(userRoute.allowedMethods({
 		throw: true,
 	}))
 }

@@ -11,6 +11,9 @@ import response from './app/middlewares/response'
 import responseFilter from './app/middlewares/responseFilter'
 import { port } from './app/config'
 
+import U from './app/controllers/user'
+U.initUserData()
+ 
 // 新建实例
 const app = new Koa()
 

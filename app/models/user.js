@@ -11,60 +11,61 @@ mongoose.Promise = global.Promise
 *	mobile
 *	gid
 * 	uid
-*	token
+*   token
 *	password
 *	role
 * 	createTime
 * 	updateTIme
 */
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
     mobile: {
-    	unique: true,
         type: String,
-        required: true,
+        default: ''
+    },
+    nickname: {
+        type: String,
+        required: true
     },
     username: {
         type: String,
         required: true
     },
-    // email: {
-    // 	unique: true,
-    // 	type: String
-    // },
-    // gid: {
-    // 	type: Number,
-    // 	default: 0,
-    // 	required: true
-    // },
-    // uid: {
-    //     unique: true,
-    // 	type: Number,
-    // 	required: true
-    // },
-    // token: {
-    // 	type: String,
-    // 	required: true
-    // },
+    email: {
+    	type: String,
+        default: ''
+    },
+    gid: {
+    	type: String,
+    	default: ''
+    },
     password: {
     	type: String,
     	required: true
     },
-    // role: {
-    // 	type: Number,
-    // 	required:true
-    // },
-    // createTime: {
-    // 	type: String,
-    // 	required: true,
-    // 	default: Date.now()
-    // },
-    // updateTIme: {
-    // 	type: String,
-    // 	default: Date.now()
-    // }
+    role: {
+    	type: Number,
+        default: 2 //1：管理员， 2：普通用户
+    },
+    createTime: {
+    	type: String,
+    	default: Date.now()
+    },
+    updateTime: {
+    	type: String,
+    	default: Date.now()
+    }
 })
 
-export default mongoose.model('User', userSchema)
+UserSchema.pre('save', function(next){
+    if(this.isNew){
+        this.createTime = this.updateTime = Date.now()
+    }else{
+        this.updateTime = Date.now()
+    }
+
+    next()
+})
+export default mongoose.model('User', UserSchema)
 
 
