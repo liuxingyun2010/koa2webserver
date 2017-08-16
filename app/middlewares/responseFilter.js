@@ -2,17 +2,7 @@
  * @ use 统一try catch处理中间件
  * @ 用于捕获内部错误，输出日志信息
  */
-// const tracer = require('tracer');
-
-// const logger = tracer.colorConsole({
-//     level: 'error',
-//     format: '{{timestamp}} <{{title}}> {{file}}(#{{line}}): {{message}}',
-//     file: 'error.log',
-//     path: __dirname
-// });
-// import log4js from 'koa-log4'
 import logUtil from '../logs/log_util'
-
 export default async(ctx, next) => {
     const start = new Date();
     var ms

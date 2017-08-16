@@ -1,23 +1,9 @@
 import jwt from 'jsonwebtoken'
 import { jwtKey } from '../config'
 import User from '../models/user'
-// import md5 from 'md5'
+import md5 from 'md5'
 
 export default async (ctx) => {
-    // if (ctx.request.body.password === 'password') {
-    //     return ctx.success({
-    //         data: {
-    //             token: jwt.sign({
-    //                 name: 'hello koa'
-    //             }, jwtKey)
-    //         },
-    //         msg: '登录成功',
-    //     })
-    // } else {
-    //     return ctx.error({
-    //         msg: '登录失败，账号或者密码不正确',
-    //     })
-    // }
     const username = ctx.request.body.username,
         password = ctx.request.body.password
     
@@ -36,30 +22,28 @@ export default async (ctx) => {
     
     // 查找用户，第一步验证用户名
     const findUser = await User.findOne({
-        username
+        username,
+        password: md5(password)
     })
 
-    console.log('111111111111111111111111111111111111111')
-    
     if(!findUser){
         return ctx.error({
             msg: '用户名或者密码不正确'
         })
     }
     
-    
-    // const keep_user = 604800000*54; //一年
-    // const token = jwt.sign({
-    //     username: username
-    // }, jwtKey)
+    const keep_user = 604800000*54; //一年
+    const token = jwt.sign({
+        username: username
+    }, jwtKey)
 
-    // // ctx.cookies.set('_app_token_', token, { maxAge: keep_user, httpOnly: false })
+    ctx.cookies.set('_app_token_', token, { maxAge: keep_user, httpOnly: false })
 
-    // return ctx.success({
-    //     data: {
-    //         token: token
-    //     },
-    //     msg: '登录成功'
-    // })
+    return ctx.success({
+        data: {
+            token: token
+        },
+        msg: '登录成功'
+    })
 
 }

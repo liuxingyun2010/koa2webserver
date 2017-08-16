@@ -33,6 +33,7 @@
         "koa-router": "next",
         "koa-views": "^6.0.2",
         "log4js": "^2.3.3",
+        "md5": "^2.2.1",
         "mongoose": "^4.11.6",
         "tracer": "^0.8.9",
         "xss": "^0.3.3"

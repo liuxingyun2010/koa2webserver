@@ -2,30 +2,21 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import onerror from 'koa-onerror'
 import helmet from 'koa-helmet'
-// import logger from 'koa-logger'
+import logger from 'koa-logger'
 import mongoose from 'mongoose'
 import views from 'koa-views'
 import db from './app/models/db'
 import router from './app/routers/'
-import log4js from 'koa-log4'
 import response from './app/middlewares/response'
 import responseFilter from './app/middlewares/responseFilter'
 import { port } from './app/config'
-
-
-import './app/logs/log_config'  //引入（运行）日志配置文件， 生产日志目录及相应文件
-
-// const logger4 = log4js.getLogger('app') //将当前文件日志命名为 app 
-// logger4.info('--------step into koa-------------')
 
 // 新建实例
 const app = new Koa()
 
 onerror(app)
 
-app
-.use(log4js.koaLogger(log4js.getLogger("http"), { level: 'auto' }))
-	// .use(logger())
+app.use(logger())
   	.use(bodyParser())
  	.use(helmet())
 
