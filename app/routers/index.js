@@ -1,8 +1,7 @@
 import routesLoader from '../utils/routesLoader'
 import userRoute from './user'
 import groupRoute from './group'
-
-
+import dailyRoute from './daily'
 
 export default function(app) {
 	// routesLoader(`${__dirname}`).then((files) => {
@@ -19,7 +18,11 @@ export default function(app) {
 		throw: true,
 	}))
 
-	app.use(groupRoute.routes()).use(userRoute.allowedMethods({
+	app.use(groupRoute.routes()).use(groupRoute.allowedMethods({
+		throw: true,
+	}))
+
+	app.use(dailyRoute.routes()).use(dailyRoute.allowedMethods({
 		throw: true,
 	}))
 }

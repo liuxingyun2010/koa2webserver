@@ -1,4 +1,3 @@
-import xss from 'xss'
 import authenticate from '../middlewares/authenticate'
 import User from '../models/user'
 import Group from '../models/group'
@@ -8,6 +7,14 @@ import md5 from 'md5'
  
 class UserController  {
 	
+	// 是否有权限操作
+	static isAuthOp(ctx){
+		const _token = ctx.header.authorization.replace('Bearer ', '')
+		const _userInfo = jwt.verify(_token, jwtKey)
+		
+		return _userInfo.role
+	}
+
 	// 初始化用户数据
 	static async initUserData(ctx){
 		const _isHasAdmin = await User.findOne({username: 'admin'})
@@ -30,10 +37,7 @@ class UserController  {
 	}
 
 	// 查询
-	static async findUserByGroup(ctx) {
-		const _group = ctx.request
-
-		console.log(_group)
+	static async findUserAll(ctx) {
 		// 过滤管理员
     	const _userList = await User.find({role: {$ne: 1}}, 'username nickname role gid')
 
@@ -48,6 +52,30 @@ class UserController  {
 		return ctx.error({
 			msg: '查询失败'
 		})
+  	}
+
+  	// 分组查询用户列表
+  	static async findUserByGroup(ctx){
+  		const _id = ctx.params.id
+  		if(!_id){
+  			return ctx.error({
+				msg: '分组id不能为空'
+			})
+  		}
+
+  		const _userList = await User.find({gid: _id}, 'username nickname role gid')
+		
+		if(!_userList){
+			return ctx.error({
+				msg: '查询失败'
+			})
+		}
+		return ctx.success({
+			data: {
+				userList: _userList
+			}
+		})
+		
   	}
 
   	// 查询单个用户信息
@@ -79,6 +107,14 @@ class UserController  {
 
 	// 添加用户
 	static async addUser(ctx) {
+		const _role = UserController.isAuthOp(ctx)
+
+		if(_role !== 1){
+			return ctx.error({
+				msg: '您没有权限操作此功能'
+			})
+		}
+		
 		const _username = ctx.request.body.username,
 			_password = ctx.request.body.password,
 			_gid = ctx.request.body.gid,
@@ -122,7 +158,7 @@ class UserController  {
 			// 每次添加用户，用户组中的个数都会加1
 			let _groupInfo = await Group.findOne({_id: _gid})
 			
-			await Group.update({_id: _gid}, {$set: {count: ++_groupInfo.count}})
+			await Group.update({_id: _gid}, {$inc: {count: 1}})
 
 			return ctx.success({
 				msg: '用户添加成功'
@@ -134,9 +170,44 @@ class UserController  {
 		})
 	}
 
-	// 根据分组查询用户列表
-	static async findUserByGroup(ctx){
+	// 修改密码
+	static async updatePassword(ctx){
+		// PUT
+		const _oldPassword = ctx.request.body.oldPassword,
+			_newPassword = ctx.request.body._newPassword
 		
+		if(!_oldPassword){
+			return ctx.error({
+				msg: '原密码不能为空'
+			})
+		}
+
+		if(!_newPassword){
+			return ctx.error({
+				msg: '新密码不能为空'
+			})
+		}
+
+		const _token = ctx.header.authorization.replace('Bearer ', '')
+		const _tokenInfo = jwt.verify(_token, jwtKey)
+
+		// 获取老密码
+    	const _userInfo = await User.findOne({_id: _tokenInfo.id}, 'password')
+		
+		if(_userInfo){
+			if(_userInfo.password !== md5(_oldPassword)){
+				return ctx.error({
+					msg: '原密码不正确'
+				})
+			}
+
+			await User.findOneAndUpdate({_id: _tokenInfo.id}, {$set: {password: md5(_newPassword)}})
+			
+			return ctx.success()
+		}
+		return ctx.error({
+			msg: '密码修改失败'
+		})
 	}
 }
 

@@ -18,7 +18,7 @@ export default async (ctx, next) => {
        	ctx.body = { code, msg, data};
     }
 
-    ctx.success = ({ data, msg }) => {
+    ctx.success = ({ data, msg = 'success' }) => {
         ctx.body = { code: 1, msg, data };
     }
     await next()

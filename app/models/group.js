@@ -22,11 +22,11 @@ const GroupSchema = new Schema({
         default: 0
     },
     createTime: {
-    	type: String,
+    	type: Date,
     	default: Date.now()
     },
     updateTime: {
-    	type: String,
+    	type: Date,
     	default: Date.now()
     }
 })

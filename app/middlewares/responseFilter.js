@@ -47,7 +47,7 @@ export default async(ctx, next) => {
         
         return ctx.error({
             code: 0,
-            msg: JSON.stringify(err)
+            msg: err
         })
     }
 }

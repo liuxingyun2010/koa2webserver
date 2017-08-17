@@ -1,5 +1,3 @@
-import xss from 'xss'
-import authenticate from '../middlewares/authenticate'
 import Group from '../models/group'
 import User from '../models/user'
 import jwt from 'jsonwebtoken'

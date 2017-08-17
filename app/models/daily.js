@@ -6,46 +6,32 @@ mongoose.Promise = global.Promise
 
 /**
 *	定义用户表字段
-* 	nickname 
-* 	email
-*	mobile
-*	gid
-* 	uid
-*   token
-*	password
-*	role
-* 	createTime
+* 	record  任务内容
+* 	progress 进度
+*	uid 用户id
+* 	today 日期
+* 	createTime 
 * 	updateTIme
 */
 
-const UserSchema = new Schema({
-    mobile: {
+const DailySchema = new Schema({
+    record: {
         type: String,
+        required: true,
         default: ''
     },
-    nickname: {
+    progress: {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    uid: {
         type: String,
         required: true
     },
-    username: {
+    today: {
         type: String,
-        required: true
-    },
-    email: {
-    	type: String,
         default: ''
-    },
-    gid: {
-    	type: String,
-    	default: ''
-    },
-    password: {
-    	type: String,
-    	required: true
-    },
-    role: {
-    	type: Number,
-        default: 2 //1：管理员， 2：普通用户
     },
     createTime: {
     	type: Date,
@@ -57,7 +43,7 @@ const UserSchema = new Schema({
     }
 })
 
-UserSchema.pre('save', function(next){
+DailySchema.pre('save', function(next){
     if(this.isNew){
         this.createTime = this.updateTime = Date.now()
     }else{
@@ -66,6 +52,7 @@ UserSchema.pre('save', function(next){
 
     next()
 })
-export default mongoose.model('User', UserSchema)
+
+export default mongoose.model('Daily', DailySchema)
 
 
