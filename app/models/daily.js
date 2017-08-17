@@ -17,19 +17,12 @@ mongoose.Promise = global.Promise
 const DailySchema = new Schema({
     uid: {
         type: String,
-        required: true
+        required: true,
+        ref: 'User'
     },
     day: {
         type: String,
         default: ''
-    },
-    gid: {
-        type: String,
-        required: true
-    },
-    nickname: {
-        type: String,
-        required: true
     },
     dailyList: [{
         record: {

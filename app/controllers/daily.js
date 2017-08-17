@@ -31,9 +31,7 @@ class DailyController {
 	static async add(ctx) {
 		const _record = ctx.request.body.record,
 			_progress = ctx.request.body.progress,
-			_uid = this.isAuthOp(ctx).id,
-			_gid = this.isAuthOp(ctx).gid,
-			_nickname = this.isAuthOp(ctx).nickname
+			_uid = this.isAuthOp(ctx).id
 
 		if (!_record) {
 			return ctx.error({
@@ -85,8 +83,6 @@ class DailyController {
 		_dailyInfo = {
 			uid: _uid,
 			day: _today,
-			gid: _gid,
-			nickname: _nickname,
 			dailyList: [{
 				record: _record,
 				progress: _progress
@@ -118,7 +114,9 @@ class DailyController {
 		_selectSql.uid = _uid ? _uid : _myUid
 		_selectSql.day = _date ? _date : moment().format('YYYY-MM-DD')
 
-		const _info = await Daily.findOne(_selectSql, 'uid gid nickname updateTime dailyList day')
+		const _info = await Daily
+			.findOne(_selectSql, 'uid updateTime dailyList day')
+			.populate('uid', 'gid nickname')
 
 		return ctx.success({
 			data: {
@@ -161,7 +159,10 @@ class DailyController {
 			}
 		}
 
-		const _list = await Daily.find(_selectSql, 'uid gid nickname updateTime dailyList day').sort({
+		const _list = await Daily
+		.find(_selectSql, 'uid updateTime dailyList day')
+		.populate('uid', 'gid nickname')
+		.sort({
 			updateTime: -1
 		})
 
@@ -184,9 +185,11 @@ class DailyController {
 			_skipCount = _defaultPageSize * (_pageNum - 1)
 
 		_selectSql.uid = _uid ? _uid : _myuid
+		
+		const _userInfo = await User.findById(_selectSql.uid, 'gid nickname')
 
 		const _list = await Daily
-			.find(_selectSql, 'uid gid nickname updateTime dailyList day')
+			.find(_selectSql, 'updateTime dailyList day')
 			.skip(_skipCount)
 			.limit(_defaultPageSize)
 			.sort({
@@ -195,32 +198,57 @@ class DailyController {
 
 		return ctx.success({
 			data: {
-				dailyList: _list
+				dailyList: _list,
+				userinfo: _userInfo 
 			}
 		})
 	}
 
 	// 获取某个人的日报一年内的日报统计
 	static async dailyDashBoard(ctx) {
+		// daily/dashboard/:id?
+
 		const _uid = ctx.params.uid,
-		_myuid = this.isAuthOp(ctx).id,
-		_defaultPageSize = 353
+			_myuid = this.isAuthOp(ctx).id,
+			_defaultPageSize = 353
+
+		const _selectUid = _uid ? _uid : _myuid
 		
-		const _selectSql = {}
+		const _userInfo = await User
+			.findById(_selectUid, 'gid nickname')
 
-		_selectSql.uid = _uid ? _uid : _myuid
-
-		const _list = await Daily
-			.find(_selectSql, 'uid day')
+		let _list = await Daily
+			.aggregate([{
+				$match: {
+					uid: _selectUid
+				},
+			}, {
+				$project: {
+					_id: 0,
+					day: '$day',
+					count: {
+						$size: "$dailyList"
+					}
+				}
+			}])
 			.limit(_defaultPageSize)
 			.sort({
-				day: -1
+				day: 1
 			})
+		
+		for(let i = 0, _len = _list.length; i < _defaultPageSize - _len; i ++){
+			let _array = {
+				day: moment().subtract(i, 'days').format('YYYY-MM-DD'),
+				count: 0
+			}
 
-		// daily/dashboard/:id?
+			_list.unshift(_array)
+		}
+
 		return ctx.success({
 			data: {
-				dayList: _list
+				dayList: _list,
+				userInfo: _userInfo
 			}
 		})
 	}
