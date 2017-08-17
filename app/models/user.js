@@ -37,7 +37,8 @@ const UserSchema = new Schema({
     },
     gid: {
     	type: String,
-    	default: ''
+    	default: '',
+        ref: 'Group'
     },
     password: {
     	type: String,
@@ -55,17 +56,11 @@ const UserSchema = new Schema({
     	type: Date,
     	default: Date.now()
     }
+},{
+    versionKey: false,
+    timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
 })
 
-UserSchema.pre('save', function(next){
-    if(this.isNew){
-        this.createTime = this.updateTime = Date.now()
-    }else{
-        this.updateTime = Date.now()
-    }
-
-    next()
-})
 export default mongoose.model('User', UserSchema)
 
 

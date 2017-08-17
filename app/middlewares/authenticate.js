@@ -35,7 +35,9 @@ export default async (ctx) => {
     const keep_user = 604800000*54; //一年
     const token = jwt.sign({
         id: findUser._id,
+        gid: findUser.gid,
         username: username,
+        nickname: findUser.nickname,
         role: findUser.role
     }, jwtKey)
 

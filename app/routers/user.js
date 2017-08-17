@@ -16,6 +16,8 @@ router.post('/login', userHandler.login)
 	.post('/add',jwt, userHandler.addUser)
 	.get('/info',jwt, userHandler.findOne)
 	.post('/pwd',jwt, userHandler.updatePassword)
+	.post('/search',jwt, userHandler.searchUser)
+
 
 
 

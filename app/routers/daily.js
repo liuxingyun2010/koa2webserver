@@ -11,8 +11,12 @@ router.prefix(`/${baseApi}/${api}`)
 
 // 登录接口，返回json web token
 router
-	.get('/', jwt, dailyHandler.find)
 	.post('/add',jwt, dailyHandler.add)
-	
+	.get('/info/:date?/:uid?',jwt, dailyHandler.dailyInfo)
+	.get('/list/:gid/:date?',jwt, dailyHandler.dailyList)
+	.put('/update/:id',jwt, dailyHandler.dailyUpdate)
+	.del('/remove/:id',jwt, dailyHandler.dailyRemove)
+	.get('/user/:pageNum/:uid?',jwt, dailyHandler.dailyListByUser)
+	.get('/dashboard/:uid?',jwt, dailyHandler.dailyDashBoard)
 
 export default router

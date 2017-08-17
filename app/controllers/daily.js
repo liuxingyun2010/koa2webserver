@@ -8,6 +8,17 @@ import {
 import moment from 'moment'
 
 class DailyController {
+
+	static init() {
+		this.add = this.add.bind(this)
+		this.dailyInfo = this.dailyInfo.bind(this)
+		this.dailyList = this.dailyList.bind(this)
+		this.dailyUpdate = this.dailyUpdate.bind(this)
+		this.dailyRemove = this.dailyRemove.bind(this)
+		this.dailyListByUser = this.dailyListByUser.bind(this)
+		this.dailyDashBoard = this.dailyDashBoard.bind(this)
+	}
+
 	// 是否有权限操作
 	static isAuthOp(ctx) {
 		const _token = ctx.header.authorization.replace('Bearer ', '')
@@ -20,7 +31,9 @@ class DailyController {
 	static async add(ctx) {
 		const _record = ctx.request.body.record,
 			_progress = ctx.request.body.progress,
-			_uid = DailyController.isAuthOp(ctx).id
+			_uid = this.isAuthOp(ctx).id,
+			_gid = this.isAuthOp(ctx).gid,
+			_nickname = this.isAuthOp(ctx).nickname
 
 		if (!_record) {
 			return ctx.error({
@@ -34,19 +47,57 @@ class DailyController {
 			})
 		}
 
-		const _dailyInfo = {
+		const _today = moment().format('YYYY-MM-DD')
+
+		const _findDaily = await Daily.findOne({
+			uid: _uid,
+			day: _today
+		})
+
+		let _dailyInfo = {
 			record: _record,
 			progress: _progress,
-			today: moment().format('YYYY-MM-DD'),
-			uid: _uid
 		}
+
+		if (_findDaily) {
+			const _updateDaily = await Daily.findOneAndUpdate({
+				uid: _uid
+			}, {
+				$addToSet: {
+					'dailyList': _dailyInfo
+				}
+			})
+
+			if (!_updateDaily) {
+				return ctx.error({
+					msg: '任务创建失败'
+				})
+			}
+
+			return ctx.success({
+				msg: '添加成功'
+			})
+		}
+
+		delete _dailyInfo.record
+		delete _dailyInfo.progress
+
+		_dailyInfo = {
+			uid: _uid,
+			day: _today,
+			gid: _gid,
+			nickname: _nickname,
+			dailyList: [{
+				record: _record,
+				progress: _progress
+			}]
+		}
+
 		const _daily = await new Daily(_dailyInfo).save()
 
 		if (_daily) {
 			return ctx.success({
-				_id: _daily._id,
-				record: _daily.record,
-				progress: _daily.progress
+				msg: '添加成功'
 			})
 		}
 
@@ -55,36 +106,208 @@ class DailyController {
 		})
 	}
 
-	// 查询分组列表
-	static async find(ctx) {
-		// let allDaily = await Daily.find({}, 'record progress')
-		// let allDaily = await Daily.aggregate().group({ _id: '$progress' })
-		let allDaily = await Daily.aggregate([{
-			$group: {
-				_id: {
-					title: '$progress'
-				},
+	// 查询某人当天日报
+	static async dailyInfo(ctx) {
+		//daily/info/:date?/:uid?
+		const _date = ctx.params.date,
+			_uid = ctx.params.uid,
+			_myUid = this.isAuthOp(ctx).id
+
+		let _selectSql = {}
+
+		_selectSql.uid = _uid ? _uid : _myUid
+		_selectSql.day = _date ? _date : moment().format('YYYY-MM-DD')
+
+		const _info = await Daily.findOne(_selectSql, 'uid gid nickname updateTime dailyList day')
+
+		return ctx.success({
+			data: {
+				dailyInfo: _info || {}
 			}
-		}, {
-			$sort: {
-				_id: -1
+		})
+	}
+
+	// 按照日期和分组查询列表数据
+	static async dailyList(ctx) {
+		//daily/list/:gid/:date?
+		let _gid = ctx.params.gid || 'all',
+			_date = ctx.params.date,
+			_myuid = this.isAuthOp(ctx).id
+
+		let _selectSql = {}
+
+		if (_gid !== 'all') {
+			_selectSql.gid = _gid
+		}
+
+
+		let _today = moment()
+
+		const _dayKey = {
+			'0': _today.format('YYYY-MM-DD'),
+			'1': _today.subtract('1', 'days').format('YYYY-MM-DD'),
+			'2': _today.subtract('1', 'days').format('YYYY-MM-DD')
+		}
+
+		if (_date == '1' || _date == '2' || _date == '0') {
+			_date = _dayKey[_date]
+		}
+
+		_selectSql.day = _date ? _date : moment().format('YYYY-MM-DD')
+
+		_selectSql.dailyList = {
+			$not: {
+				$size: 0
 			}
-		}])
+		}
 
+		const _list = await Daily.find(_selectSql, 'uid gid nickname updateTime dailyList day').sort({
+			updateTime: -1
+		})
 
+		return ctx.success({
+			data: {
+				dailyList: _list
+			}
+		})
+	}
 
-		if (allDaily) {
-			return ctx.success({
-				data: {
-					daily: allDaily
-				}
+	// 获取某个人的日报列表
+	static async dailyListByUser(ctx) {
+		// daily/user/:id?
+		const _pageNum = ctx.params.pageNum || 1,
+			_uid = ctx.params.uid,
+			_myuid = this.isAuthOp(ctx).id,
+			_defaultPageSize = 10 //默认分页数
+
+		const _selectSql = {},
+			_skipCount = _defaultPageSize * (_pageNum - 1)
+
+		_selectSql.uid = _uid ? _uid : _myuid
+
+		const _list = await Daily
+			.find(_selectSql, 'uid gid nickname updateTime dailyList day')
+			.skip(_skipCount)
+			.limit(_defaultPageSize)
+			.sort({
+				day: -1
 			})
-		} else {
+
+		return ctx.success({
+			data: {
+				dailyList: _list
+			}
+		})
+	}
+
+	// 获取某个人的日报一年内的日报统计
+	static async dailyDashBoard(ctx) {
+		const _uid = ctx.params.uid,
+		_myuid = this.isAuthOp(ctx).id,
+		_defaultPageSize = 353
+		
+		const _selectSql = {}
+
+		_selectSql.uid = _uid ? _uid : _myuid
+
+		const _list = await Daily
+			.find(_selectSql, 'uid day')
+			.limit(_defaultPageSize)
+			.sort({
+				day: -1
+			})
+
+		// daily/dashboard/:id?
+		return ctx.success({
+			data: {
+				dayList: _list
+			}
+		})
+	}
+
+	// 更新任务
+	static async dailyUpdate(ctx) {
+		const _id = ctx.params.id
+
+		if (!_id) {
 			return ctx.error({
-				msg: '查询失败'
+				msg: '任务id不能为空'
 			})
 		}
+
+		const _record = ctx.request.body.record,
+			_progress = ctx.request.body.progress,
+			_uid = this.isAuthOp(ctx).id
+
+		if (!_record || _progress === undefined) {
+			return ctx.success({
+				msg: '数据未更新'
+			})
+		}
+
+		const _update = await Daily
+			.update({
+				uid: _uid,
+				day: moment().format('YYYY-MM-DD'),
+				'dailyList._id': _id
+			}, {
+				$set: {
+					'dailyList.$.progress': _progress,
+					'dailyList.$.record': _record
+				}
+			})
+
+
+		if (!_update) {
+			return ctx.success({
+				msg: '修改失败'
+			})
+		}
+
+		return ctx.success({
+			msg: '更新成功'
+		})
 	}
+
+	// 删除任务
+	static async dailyRemove(ctx) {
+		const _id = ctx.params.id
+
+		if (!_id) {
+			return ctx.error({
+				msg: '任务id不能为空'
+			})
+		}
+
+		const _uid = this.isAuthOp(ctx).id
+
+		const _detele = await Daily
+			.update({
+				uid: _uid,
+				day: moment().format('YYYY-MM-DD'),
+				'dailyList._id': _id
+			}, {
+				$pull: {
+					dailyList: {
+						'_id': _id
+					}
+				}
+			})
+
+
+		if (!_detele) {
+			return ctx.success({
+				msg: '删除失败'
+			})
+		}
+
+		return ctx.success({
+			msg: '删除成功'
+		})
+	}
+
 }
+
+DailyController.init()
 
 export default DailyController

@@ -15,24 +15,34 @@ mongoose.Promise = global.Promise
 */
 
 const DailySchema = new Schema({
-    record: {
-        type: String,
-        required: true,
-        default: ''
-    },
-    progress: {
-        type: Number,
-        default: 0,
-        required: true
-    },
     uid: {
         type: String,
         required: true
     },
-    today: {
+    day: {
         type: String,
         default: ''
     },
+    gid: {
+        type: String,
+        required: true
+    },
+    nickname: {
+        type: String,
+        required: true
+    },
+    dailyList: [{
+        record: {
+            type: String,
+            required: true,
+            default: ''
+        },
+        progress: {
+            type: Number,
+            default: 0,
+            required: true
+        }
+    }],
     createTime: {
     	type: Date,
     	default: Date.now()
@@ -41,16 +51,9 @@ const DailySchema = new Schema({
     	type: Date,
     	default: Date.now()
     }
-})
-
-DailySchema.pre('save', function(next){
-    if(this.isNew){
-        this.createTime = this.updateTime = Date.now()
-    }else{
-        this.updateTime = Date.now()
-    }
-
-    next()
+},{
+    versionKey: false,
+    timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
 })
 
 export default mongoose.model('Daily', DailySchema)

@@ -29,16 +29,9 @@ const GroupSchema = new Schema({
     	type: Date,
     	default: Date.now()
     }
-})
-
-GroupSchema.pre('save', function(next){
-    if(this.isNew){
-        this.createTime = this.updateTime = Date.now()
-    }else{
-        this.updateTime = Date.now()
-    }
-
-    next()
+},{
+    versionKey: false,
+    timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
 })
 
 export default mongoose.model('Group', GroupSchema)
