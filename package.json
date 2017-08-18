@@ -16,7 +16,7 @@
     "scripts": {
         "start": "node index.js",
         "dev": "nodemon index.js --exec babel-node",
-        "prd": "pm2 start ndex.js"
+        "build": "pm2 start index.js --name daily --watch"
     },
     "dependencies": {
         "babel-polyfill": "^6.5.0",
@@ -24,13 +24,16 @@
         "jsonwebtoken": "^7.2.1",
         "koa": "^2.0.0-alpha.7",
         "koa-bodyparser": "^4.2.0",
+        "koa-connect-history-api-fallback": "^0.3.1",
         "koa-helmet": "^2.0.0",
         "koa-json": "^2.0.2",
         "koa-jwt": "^2.1.0",
         "koa-log4": "2",
         "koa-logger": "^2.0.0",
+        "koa-nunjucks-promise": "^1.1.1",
         "koa-onerror": "^3.1.0",
         "koa-router": "next",
+        "koa-static": "^4.0.1",
         "koa-views": "^6.0.2",
         "log4js": "^2.3.3",
         "md5": "^2.2.1",

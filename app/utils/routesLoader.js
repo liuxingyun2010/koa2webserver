@@ -9,11 +9,10 @@ export default function(dirname) {
             if (err) {
                 return reject(err)
             }
-            files.forEach((file) => {
-                const route = require(file) // eslint-disable-line global-require, import/no-dynamic-require
+            files.forEach(async (file) => {
+                const route = await require(file) // eslint-disable-line global-require, import/no-dynamic-require
                 routes.push(route)
             })
-            console.log(routes)
             return resolve(routes)
         })
     })

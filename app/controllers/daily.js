@@ -160,11 +160,11 @@ class DailyController {
 		}
 
 		const _list = await Daily
-		.find(_selectSql, 'uid updateTime dailyList day')
-		.populate('uid', 'gid nickname')
-		.sort({
-			updateTime: -1
-		})
+			.find(_selectSql, 'uid updateTime dailyList day')
+			.populate('uid as u', 'gid nickname')
+			.sort({
+				updateTime: -1
+			})
 
 		return ctx.success({
 			data: {
@@ -185,7 +185,7 @@ class DailyController {
 			_skipCount = _defaultPageSize * (_pageNum - 1)
 
 		_selectSql.uid = _uid ? _uid : _myuid
-		
+
 		const _userInfo = await User.findById(_selectSql.uid, 'gid nickname')
 
 		const _list = await Daily
@@ -199,7 +199,7 @@ class DailyController {
 		return ctx.success({
 			data: {
 				dailyList: _list,
-				userinfo: _userInfo 
+				userinfo: _userInfo
 			}
 		})
 	}
@@ -207,15 +207,15 @@ class DailyController {
 	// 获取某个人的日报一年内的日报统计
 	static async dailyDashBoard(ctx) {
 		// daily/dashboard/:id?
-
 		const _uid = ctx.params.uid,
 			_myuid = this.isAuthOp(ctx).id,
-			_defaultPageSize = 353
+			_defaultPageSize = 357 + new Date().getDay()
 
 		const _selectUid = _uid ? _uid : _myuid
-		
+
 		const _userInfo = await User
 			.findById(_selectUid, 'gid nickname')
+			.populate('gid', 'name')
 
 		let _list = await Daily
 			.aggregate([{
@@ -236,13 +236,16 @@ class DailyController {
 				day: 1
 			})
 		
-		for(let i = 0, _len = _list.length; i < _defaultPageSize - _len; i ++){
+		let _lastLen = _defaultPageSize - _list.length
+		
+		while(_lastLen > 0){
 			let _array = {
-				day: moment().subtract(i, 'days').format('YYYY-MM-DD'),
+				day: moment().subtract(_defaultPageSize - _lastLen, 'days').format('YYYY-MM-DD'),
 				count: 0
 			}
 
 			_list.unshift(_array)
+			_lastLen--
 		}
 
 		return ctx.success({
