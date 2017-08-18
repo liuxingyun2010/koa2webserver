@@ -1,22 +1,20 @@
-import Koa from 'koa'
-import bodyParser from 'koa-bodyparser'
-import onerror from 'koa-onerror'
-import helmet from 'koa-helmet'
-import logger from 'koa-logger'
-import mongoose from 'mongoose'
-import views from 'koa-views'
-import convert from 'koa-convert'
-import koaStatic from 'koa-static'
-import db from './app/models/db'
-import router from './app/routers/'
-import response from './app/middlewares/response'
-import responseFilter from './app/middlewares/responseFilter'
-import {
-	port
-} from './app/config'
+var Koa = require('koa')
+var bodyParser = require('koa-bodyparser')
+var onerror = require('koa-onerror')
+var helmet = require('koa-helmet')
+var logger = require('koa-logger')
+var mongoose = require('mongoose')
+var views = require('koa-views')
+var convert = require('koa-convert')
+var koaStatic = require('koa-static')
+var db = require('./app/models/db')
+var router = require('./app/routers/')
+var response = require('./app/middlewares/response')
+var responseFilter = require('./app/middlewares/responseFilter')
+var port = require('./app/config').port
 
 // 初始化admin用户
-import U from './app/controllers/user'
+var U = require('./app/controllers/user')
 U.initUserData()
 
 // 新建实例
