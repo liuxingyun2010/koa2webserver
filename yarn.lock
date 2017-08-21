@@ -2373,6 +2373,22 @@ koa-send@^4.0.0, koa-send@^4.1.0:
     mz "^2.6.0"
     resolve-path "^1.3.3"
 
+koa-send@~3.1.0:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/koa-send/-/koa-send-3.1.1.tgz#ef0af0f9a531ec817e88056b52b8e32d2e0ba91a"
+  dependencies:
+    co "^4.6.0"
+    debug "*"
+    mz "^2.3.1"
+    resolve-path "^1.3.1"
+
+koa-static-plus@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/koa-static-plus/-/koa-static-plus-0.1.1.tgz#0b8b713af8877bab0c0619e50ed4f60a66641e98"
+  dependencies:
+    debug "*"
+    koa-send "~3.1.0"
+
 koa-static@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/koa-static/-/koa-static-4.0.1.tgz#b99521ed848d7adb79acae9c824d8d8277a8c4d5"
@@ -2791,7 +2807,7 @@ mute-stream@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
 
-mz@^2.4.0, mz@^2.6.0:
+mz@^2.3.1, mz@^2.4.0, mz@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/mz/-/mz-2.6.0.tgz#c8b8521d958df0a4f2768025db69c719ee4ef1ce"
   dependencies:
@@ -3544,7 +3560,7 @@ resolve-from@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-2.0.0.tgz#9480ab20e94ffa1d9e80a804c7ea147611966b57"
 
-resolve-path@^1.3.3:
+resolve-path@^1.3.1, resolve-path@^1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/resolve-path/-/resolve-path-1.3.3.tgz#4d83aba6468c2b8e632a575e3f52b0fa0dbe1a5c"
   dependencies:

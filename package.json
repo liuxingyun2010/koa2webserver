@@ -34,6 +34,7 @@
         "koa-onerror": "^3.1.0",
         "koa-router": "next",
         "koa-static": "^4.0.1",
+        "koa-static-plus": "^0.1.1",
         "koa-views": "^6.0.2",
         "log4js": "^2.3.3",
         "md5": "^2.2.1",
