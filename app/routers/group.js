@@ -1,7 +1,7 @@
-import Router from 'koa-router'
-import groupHandler from '../controllers/group'
-import { baseApi } from '../config'
-import jwt from '../middlewares/jwt'
+var Router = require('koa-router')
+var groupHandler = require('../controllers/group')
+var baseApi = require('../config').baseApi
+var jwt = require('../middlewares/jwt')
 
 const api = 'group'
 
@@ -13,4 +13,4 @@ router
 	.get('/', jwt, groupHandler.find)
 	.post('/add',jwt, groupHandler.add)
 	
-export default router
+module.exports = router

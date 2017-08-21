@@ -1,7 +1,7 @@
-import Router from 'koa-router'
-import userHandler from '../controllers/user'
-import { baseApi } from '../config'
-import jwt from '../middlewares/jwt'
+var Router = require('koa-router')
+var userHandler = require('../controllers/user')
+var baseApi = require('../config').baseApi
+var jwt = require('../middlewares/jwt')
 
 const api = 'user'
 
@@ -20,4 +20,4 @@ router.post('/login', userHandler.login)
 
 
 
-export default router
+module.exports = router

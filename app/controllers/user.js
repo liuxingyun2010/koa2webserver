@@ -1,11 +1,9 @@
-import authenticate from '../middlewares/authenticate'
-import User from '../models/user'
-import Group from '../models/group'
-import jwt from 'jsonwebtoken'
-import {
-	jwtKey
-} from '../config'
-import md5 from 'md5'
+var authenticate = require('../middlewares/authenticate')
+var User = require('../models/user')
+var Group = require('../models/group')
+var jwt = require('jsonwebtoken')
+var jwtKey = require('../config').jwtKey
+var md5 = require('md5')
 
 class UserController {
 
@@ -275,4 +273,4 @@ class UserController {
 }
 
 
-export default UserController
+module.exports =  UserController

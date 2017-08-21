@@ -13,7 +13,7 @@
 // import log4js from 'koa-log4'
 // const logger = log4js.getLogger('app')
 
-export default async (ctx, next) => {
+module.exports =  async (ctx, next) => {
     ctx.error = ({ data, msg, code = 0 }) => {
        	ctx.body = { code, msg, data};
     }

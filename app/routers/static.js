@@ -1,5 +1,5 @@
-import Router from 'koa-router'
-import { baseApi } from '../config'
+var Router = require('koa-router')
+var baseApi = require('../config')
 
 const router = new Router() 
 
@@ -10,4 +10,4 @@ router.get('/*', async (ctx) => {
 	await ctx.render('index')
 })
 
-export default router
+module.exports = router

@@ -2,8 +2,9 @@
  * @ use 统一try catch处理中间件
  * @ 用于捕获内部错误，输出日志信息
  */
-import logUtil from '../logsConfig/log_util'
-export default async(ctx, next) => {
+var logUtil = require('../logsConfig/log_util')
+
+module.exports = async(ctx, next) => {
     const start = new Date();
     var ms
     

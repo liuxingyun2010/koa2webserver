@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import { port, connectString } from '../config'
-
+var mongoose = require('mongoose')
+var port = require('../config').port
+var connectString = require('../config').connectString
 // const dbConfig = config[process.env.NODE_ENV||'development'];
 const dbConfig = {
 	useMongoClient: true

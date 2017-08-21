@@ -1,6 +1,6 @@
-import jwt from 'koa-jwt'
-import { jwtKey } from '../config'
+var jwt = require('koa-jwt')
+var jwtKey = require('../config').jwtKey
 
-export default jwt({
+module.exports =  jwt({
 	secret: jwtKey
 })

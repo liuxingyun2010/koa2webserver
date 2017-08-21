@@ -1,7 +1,7 @@
-import Router from 'koa-router'
-import dailyHandler from '../controllers/daily'
-import { baseApi } from '../config'
-import jwt from '../middlewares/jwt'
+var Router = require('koa-router')
+var dailyHandler = require('../controllers/daily')
+var baseApi = require('../config').baseApi
+var jwt = require('../middlewares/jwt')
 
 const api = 'daily'
 
@@ -19,4 +19,4 @@ router
 	.get('/user/:pageNum/:uid?',jwt, dailyHandler.dailyListByUser)
 	.get('/dashboard/:uid?',jwt, dailyHandler.dailyDashBoard)
 
-export default router
+module.exports = router

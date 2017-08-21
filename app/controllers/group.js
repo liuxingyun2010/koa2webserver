@@ -1,7 +1,7 @@
-import Group from '../models/group'
-import User from '../models/user'
-import jwt from 'jsonwebtoken'
-import { jwtKey } from '../config'
+var Group = require('../models/group')
+var User = require('../models/user')
+var jwt = require('jsonwebtoken')
+var jwtKey = require('../config').jwtKey
 
 class GroupController {
 	// 是否有权限操作
@@ -67,4 +67,4 @@ class GroupController {
 	}
 }
 
-export default GroupController
+module.exports =  GroupController

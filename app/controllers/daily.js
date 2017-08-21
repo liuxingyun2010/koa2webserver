@@ -1,11 +1,9 @@
-import Group from '../models/group'
-import User from '../models/user'
-import Daily from '../models/daily'
-import jwt from 'jsonwebtoken'
-import {
-	jwtKey
-} from '../config'
-import moment from 'moment'
+var Group = require('../models/group')
+var User = require('../models/user')
+var Daily = require('../models/daily')
+var jwt = require('jsonwebtoken')
+var jwtKey = require('../config').jwtKey
+var moment = require('moment')
 
 class DailyController {
 
@@ -31,7 +29,8 @@ class DailyController {
 	static async add(ctx) {
 		const _record = ctx.request.body.record,
 			_progress = ctx.request.body.progress,
-			_uid = this.isAuthOp(ctx).id
+			_uid = this.isAuthOp(ctx).id,
+			_gid = this.isAuthOp(ctx).gid
 
 		if (!_record) {
 			return ctx.error({
@@ -46,7 +45,6 @@ class DailyController {
 		}
 
 		const _today = moment().format('YYYY-MM-DD')
-
 		const _findDaily = await Daily.findOne({
 			uid: _uid,
 			day: _today
@@ -59,7 +57,8 @@ class DailyController {
 
 		if (_findDaily) {
 			const _updateDaily = await Daily.findOneAndUpdate({
-				uid: _uid
+				uid: _uid,
+				day: _today
 			}, {
 				$addToSet: {
 					'dailyList': _dailyInfo
@@ -83,6 +82,7 @@ class DailyController {
 		_dailyInfo = {
 			uid: _uid,
 			day: _today,
+			gid: _gid,
 			dailyList: [{
 				record: _record,
 				progress: _progress
@@ -152,7 +152,7 @@ class DailyController {
 		}
 
 		_selectSql.day = _date ? _date : moment().format('YYYY-MM-DD')
-
+		
 		_selectSql.dailyList = {
 			$not: {
 				$size: 0
@@ -161,7 +161,7 @@ class DailyController {
 
 		const _list = await Daily
 			.find(_selectSql, 'uid updateTime dailyList day')
-			.populate('uid as u', 'gid nickname')
+			.populate('uid', 'gid nickname')
 			.sort({
 				updateTime: -1
 			})
@@ -341,4 +341,4 @@ class DailyController {
 
 DailyController.init()
 
-export default DailyController
+module.exports =  DailyController

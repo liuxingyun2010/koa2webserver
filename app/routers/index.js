@@ -1,11 +1,11 @@
-import routesLoader from '../utils/routesLoader'
-import userRoute from './user'
-import groupRoute from './group'
-import dailyRoute from './daily'
-import testRoute from './static'
+var routesLoader = require('../utils/routesLoader')
+var userRoute = require('./user')
+var groupRoute = require('./group')
+var dailyRoute = require('./daily')
+var testRoute = require('./static')
 
 
-export default function(app) {
+module.exports = function(app) {
 	app
 		.use(userRoute.routes())
 		.use(groupRoute.routes())

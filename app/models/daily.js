@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+var mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
@@ -18,7 +18,12 @@ const DailySchema = new Schema({
     uid: {
         type: String,
         required: true,
-        ref: 'User'
+        ref: 'User' 
+    },
+    gid: {
+        type: String,
+        required: true,
+        ref: 'Group'
     },
     day: {
         type: String,
@@ -49,6 +54,6 @@ const DailySchema = new Schema({
     timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
 })
 
-export default mongoose.model('Daily', DailySchema)
+module.exports = mongoose.model('Daily', DailySchema)
 
 

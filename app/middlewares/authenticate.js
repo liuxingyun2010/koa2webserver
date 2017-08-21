@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken'
-import { jwtKey } from '../config'
-import User from '../models/user'
-import md5 from 'md5'
+var jwt = require('jsonwebtoken')
+var jwtKey = require('../config').jwtKey
+var User = require('../models/user')
+var md5 = require('md5')
 
 export default async (ctx) => {
     const username = ctx.request.body.username,

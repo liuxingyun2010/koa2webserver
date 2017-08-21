@@ -1,4 +1,4 @@
-import glob from 'glob'
+var glob = require('glob')
 
 export default function(dirname) {
     return new Promise((resolve, reject) => {
