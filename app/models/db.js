@@ -1,7 +1,6 @@
 var mongoose = require('mongoose')
 var port = require('../config').port
 var connectString = require('../config').connectString
-// const dbConfig = config[process.env.NODE_ENV||'development'];
 const dbConfig = {
 	useMongoClient: true
 }
@@ -21,3 +20,5 @@ mongoose.connection.on('error', function(err) {
 mongoose.connection.on('disconnected', function() {
 	console.log('Mongoose connection disconnected');
 })
+
+module.exports = mongoose
