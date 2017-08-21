@@ -3,7 +3,7 @@ var jwtKey = require('../config').jwtKey
 var User = require('../models/user')
 var md5 = require('md5')
 
-export default async (ctx) => {
+module.exports = async (ctx) => {
     const username = ctx.request.body.username,
         password = ctx.request.body.password
     
