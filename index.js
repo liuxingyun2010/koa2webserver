@@ -1,3 +1,4 @@
+var http = require('http')
 var Koa = require('koa')
 var bodyParser = require('koa-bodyparser')
 var onerror = require('koa-onerror')
@@ -34,4 +35,6 @@ app.use(logger())
 // 加载路由
 router(app)
 
-app.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
+const server = http.createServer(app.callback())
+
+server.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
