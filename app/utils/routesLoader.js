@@ -1,6 +1,6 @@
 var glob = require('glob')
 
-export default function(dirname) {
+module.exports = function(dirname) {
     return new Promise((resolve, reject) => {
         const routes = []
         glob(`${dirname}/*`, {
