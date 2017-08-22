@@ -25,6 +25,7 @@
         "koa": "^2.0.0-alpha.7",
         "koa-bodyparser": "^4.2.0",
         "koa-connect-history-api-fallback": "^0.3.1",
+        "koa-favicon": "^2.0.0",
         "koa-helmet": "^2.0.0",
         "koa-json": "^2.0.2",
         "koa-jwt": "^2.1.0",
