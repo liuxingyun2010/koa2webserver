@@ -33,7 +33,8 @@ app.use(logger())
 	.use(response).use(responseFilter) // 错误处理
 
 // 加载路由
-router(app)
+// router(app) 
+app.use(router)
 
 const server = http.createServer(app.callback())
 
