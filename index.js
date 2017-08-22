@@ -18,6 +18,7 @@ var userRoute = require('./app/routers/user')
 var groupRoute = require('./app/routers/group')
 var dailyRoute = require('./app/routers/daily')
 var staticRoute = require('./app/routers/static')
+var http = require('http')
 
 // 初始化admin用户
 var U = require('./app/controllers/user')
@@ -45,5 +46,5 @@ app.use(userRoute.routes(), userRoute.allowedMethods())
 	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
 	.use(staticRoute.routes(), staticRoute.allowedMethods())
 	
-
-app.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
+const server = http.createServer(app.callback())
+server.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
