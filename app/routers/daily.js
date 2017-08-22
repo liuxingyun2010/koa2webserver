@@ -20,3 +20,5 @@ router
 	.get('/dashboard/:uid?', dailyHandler.dailyDashBoard)
 
 module.exports = router
+
+
