@@ -13,13 +13,11 @@ var router = require('./app/routers/')
 var response = require('./app/middlewares/response')
 var responseFilter = require('./app/middlewares/responseFilter')
 var port = require('./app/config').port
-var cors = require('koa2-cors')
-
+var favicon = require('koa-favicon')
 var userRoute = require('./app/routers/user')
 var groupRoute = require('./app/routers/group')
 var dailyRoute = require('./app/routers/daily')
 var staticRoute = require('./app/routers/static')
-
 
 // 初始化admin用户
 var U = require('./app/controllers/user')
@@ -30,7 +28,7 @@ const app = new Koa()
 
 onerror(app)
 
-app.use(cors());
+app.use(favicon(__dirname + '/public/favicon.ico'))
 
 app.use(logger())
 	.use(bodyParser())
@@ -43,9 +41,9 @@ app.use(logger())
 
 // 加载路由
 app.use(userRoute.routes(), userRoute.allowedMethods())
-	.use(groupRoute.routes(), userRoute.allowedMethods())
-	.use(dailyRoute.routes(), userRoute.allowedMethods())
-	.use(staticRoute.routes(), userRoute.allowedMethods())
+	.use(groupRoute.routes(), groupRoute.allowedMethods())
+	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
+	.use(staticRoute.routes(), staticRoute.allowedMethods())
 	
 
 app.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
