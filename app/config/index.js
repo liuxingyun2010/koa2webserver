@@ -4,3 +4,4 @@ module.exports = {
 	baseApi: 'api',
 	jwtKey: '!@#zaq2017'
 }
+

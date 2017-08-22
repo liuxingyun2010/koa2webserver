@@ -6,7 +6,7 @@ const router = new Router()
 router.prefix(`/`)
 
 // 登录接口，返回json web token
-router.get('/x', async (ctx) => {
+router.get('/*', async (ctx) => {
 	await ctx.render('index')
 })
 

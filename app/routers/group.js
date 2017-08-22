@@ -10,7 +10,7 @@ const router = new Router()
 router.prefix(`/${baseApi}/${api}`)
 
 router
-	.get('/', groupHandler.find)
-	.post('/add', groupHandler.add)
+	.get('/', jwt, groupHandler.find)
+	.post('/add', jwt, groupHandler.add)
 	
 module.exports = router

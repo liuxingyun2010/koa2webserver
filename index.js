@@ -15,6 +15,12 @@ var responseFilter = require('./app/middlewares/responseFilter')
 var port = require('./app/config').port
 var cors = require('koa2-cors')
 
+var userRoute = require('./app/routers/user')
+var groupRoute = require('./app/routers/group')
+var dailyRoute = require('./app/routers/daily')
+var staticRoute = require('./app/routers/static')
+
+
 // 初始化admin用户
 var U = require('./app/controllers/user')
 U.initUserData()
@@ -23,33 +29,23 @@ U.initUserData()
 const app = new Koa()
 
 onerror(app)
-app.use(cors({
-	origin: function(ctx) {
-		if (ctx.url === '/test') {
-			return false;
-		}
-		return '*';
-	},
-	exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-	maxAge: 5,
-	credentials: true,
-	allowMethods: ['GET', 'POST', 'DELETE', 'PUT'],
-	allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-}));
+
+app.use(cors());
 
 app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
-	// .use(convert(koaStatic(__dirname + '/views')))
-	// .use(views(__dirname + '/views', {
-	// 	extension: 'html'
-	// })) // 配置模板文件目录和后缀名
+	.use(convert(koaStatic(__dirname + '/views')))
+	.use(views(__dirname + '/views', {
+		extension: 'html'
+	})) // 配置模板文件目录和后缀名
 	.use(response).use(responseFilter) // 错误处理
 
 // 加载路由
-// router(app) 
-app.use(router)
+app.use(userRoute.routes(), userRoute.allowedMethods())
+	.use(groupRoute.routes(), userRoute.allowedMethods())
+	.use(dailyRoute.routes(), userRoute.allowedMethods())
+	.use(staticRoute.routes(), userRoute.allowedMethods())
+	
 
-const server = http.createServer(app.callback())
-
-server.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
+app.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))

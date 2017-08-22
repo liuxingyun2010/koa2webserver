@@ -41,7 +41,7 @@ module.exports = async (ctx) => {
         role: findUser.role
     }, jwtKey)
 
-    ctx.cookies.set('_app_token_', token, { maxAge: keep_user, httpOnly: false })
+    // ctx.cookies.set('_app_token_', token, { maxAge: keep_user, httpOnly: false })
 
     return ctx.success({
         data: {
