@@ -270,6 +270,12 @@ class UserController {
 			}
 		})
 	}
+
+	static async test(ctx){
+		return ctx.success({
+			data:'123'
+		})
+	}
 }
 
 
