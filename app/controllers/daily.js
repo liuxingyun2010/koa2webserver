@@ -188,6 +188,12 @@ class DailyController {
 
 		const _userInfo = await User.findById(_selectSql.uid, 'gid nickname')
 
+		_selectSql.dailyList = {
+			$not: {
+				$size: 0
+			}
+		}
+		
 		const _list = await Daily
 			.find(_selectSql, 'updateTime dailyList day')
 			.skip(_skipCount)
