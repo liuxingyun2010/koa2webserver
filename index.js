@@ -1,3 +1,4 @@
+var path = require('path')
 var http = require('http')
 var Koa = require('koa')
 var bodyParser = require('koa-bodyparser')
@@ -14,6 +15,7 @@ var response = require('./app/middlewares/response')
 var responseFilter = require('./app/middlewares/responseFilter')
 var port = require('./app/config').port
 var favicon = require('koa-favicon')
+var staticCache = require('koa-static-cache')
 var userRoute = require('./app/routers/user')
 var groupRoute = require('./app/routers/group')
 var dailyRoute = require('./app/routers/daily')
@@ -34,13 +36,16 @@ app.use(convert(historyApiFallback({
 	verbose: false
 })))
 
-app.use(favicon(__dirname + '/public/favicon.ico'))
+app.use(favicon(path.join(__dirname, './public/favicon.ico')))
 
 app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
-	.use(convert(koaStatic(__dirname + '/views')))
-	.use(views(__dirname + '/views', {
+	.use(convert(koaStatic(path.join(__dirname, './views')))
+	.use(staticCache(path.join(__dirname, './views'), {
+	  maxAge: 365 * 24 * 60 * 60
+	}))
+	.use(views(path.join(__dirname, './views'), {
 		extension: 'html'
 	})) // 配置模板文件目录和后缀名
 	.use(response).use(responseFilter) // 错误处理
