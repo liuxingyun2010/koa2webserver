@@ -39,10 +39,10 @@ app.use(favicon(__dirname + '/public/favicon.ico'))
 app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
-	.use(convert(koaStatic(__dirname + '/views')))
-	.use(views(__dirname + '/views', {
-		extension: 'html'
-	})) // 配置模板文件目录和后缀名
+	.use(convert(koaStatic(__dirname + './views')))
+	// .use(views(__dirname + '/views', {
+	// 	extension: 'html'
+	// })) // 配置模板文件目录和后缀名
 	.use(response).use(responseFilter) // 错误处理
 
 // 加载路由
