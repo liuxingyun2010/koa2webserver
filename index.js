@@ -41,10 +41,10 @@ app.use(favicon(path.join(__dirname, './public/favicon.ico')))
 app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
-	.use(convert(koaStatic(path.join(__dirname, './views'))))
 	.use(staticCache(path.join(__dirname, './views'), {
-	  maxAge: 365 * 24 * 60 * 60
+		maxAge: 365 * 24 * 60 * 60
 	}))
+	.use(convert(koaStatic(path.join(__dirname, './views'))))
 	.use(views(path.join(__dirname, './views'), {
 		extension: 'html'
 	})) // 配置模板文件目录和后缀名
@@ -55,6 +55,6 @@ app.use(userRoute.routes(), userRoute.allowedMethods())
 	.use(groupRoute.routes(), groupRoute.allowedMethods())
 	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
 	// .use(staticRoute.routes(), staticRoute.allowedMethods())
-	
+
 const server = http.createServer(app.callback())
 server.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
