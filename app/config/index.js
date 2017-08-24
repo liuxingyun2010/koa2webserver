@@ -1,8 +1,23 @@
+const config = {
+	production: {
+		port: 80,
+		connectString: 'mongodb://dev:dev1qaz2wsx@127.0.0.1:27017/daily'
+	},
+	test: {
+		port: 3000,
+		connectString: 'mongodb://dbdev:db1234567@127.0.0.1:27017/daily', 
+	},
+	develop:{
+		port: 3333,
+		connectString: 'mongodb://127.0.0.1:27017/dailydb',
+	}
+}
+
+const env = process.env.NODE_ENV? process.env.NODE_ENV: 'develop'
+
 module.exports = {
-	port: process.env.PORT || 3344,
-	connectString: 'mongodb://localhost:27017/dailydb',
-	// connectString: 'mongodb://dbdev:db1234567@10.0.3.207:27017/daily', 
-	// connectString: 'mongodb://dev:dev1qaz2wsx@106.15.126.244:27017/daily',
+	port: config[env].port,
+	connectString: config[env].connectString,
 	baseApi: 'api',
 	jwtKey: '!@#zaq2017'
 }
