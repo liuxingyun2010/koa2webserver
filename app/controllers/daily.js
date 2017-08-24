@@ -127,12 +127,15 @@ class DailyController {
 
 	// 按照日期和分组查询列表数据
 	static async dailyList(ctx) {
-		//daily/list/:gid/:date?
-		let _gid = ctx.params.gid || 'all',
-			_date = ctx.params.date,
-			_myuid = this.isAuthOp(ctx).id
+		//daily/list/:gid/:date/:page?
+		let _pageNum = ctx.params.pageNum || 1,
+			_gid = ctx.params.gid || 'all',
+			_date = ctx.params.date || '0',
+			_myuid = this.isAuthOp(ctx).id,
+			_defaultPageSize = 100 //默认分页数
 
-		let _selectSql = {}
+		let _selectSql = {},
+			_skipCount = _defaultPageSize * (_pageNum - 1)
 
 		if (_gid !== 'all') {
 			_selectSql.gid = _gid
@@ -162,6 +165,8 @@ class DailyController {
 		const _list = await Daily
 			.find(_selectSql, 'uid updateTime dailyList day')
 			.populate('uid', 'gid nickname')
+			.skip(_skipCount)
+			.limit(_defaultPageSize)
 			.sort({
 				updateTime: -1
 			})
@@ -175,11 +180,11 @@ class DailyController {
 
 	// 获取某个人的日报列表
 	static async dailyListByUser(ctx) {
-		// daily/user/:id?
+		// daily/user/:id/:page?
 		const _pageNum = ctx.params.pageNum || 1,
 			_uid = ctx.params.uid,
 			_myuid = this.isAuthOp(ctx).id,
-			_defaultPageSize = 10 //默认分页数
+			_defaultPageSize = 20 //默认分页数
 
 		const _selectSql = {},
 			_skipCount = _defaultPageSize * (_pageNum - 1)
