@@ -35,7 +35,8 @@ onerror(app)
 // 	verbose: false
 // })))
 
-app.use(favicon(path.join(__dirname, './public/favicon.ico')))
+// app.use(favicon(path.join(__dirname, './public/favicon.ico')))
+app.use(favicon(__dirname + '/public/favicon.ico'))
 
 app.use(logger())
 	.use(bodyParser())
