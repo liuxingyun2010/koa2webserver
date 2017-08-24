@@ -1,3 +1,4 @@
+var path = require('path')
 var http = require('http')
 var Koa = require('koa')
 var bodyParser = require('koa-bodyparser')
@@ -40,12 +41,12 @@ app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
 	// .use(convert(koaStatic(__dirname + './views')))
-	.use(views(__dirname + '/views', {
+	.use(views(path.join(__dirname, './views'), {
 		extension: 'html'
 	})) // 配置模板文件目录和后缀名
 	.use(response).use(responseFilter) // 错误处理
 
-console.log(__dirname + './views')
+console.log(path.join(__dirname, './views'))
 
 // 加载路由
 app.use(userRoute.routes(), userRoute.allowedMethods())
