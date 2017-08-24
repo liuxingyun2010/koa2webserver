@@ -20,7 +20,7 @@ var groupRoute = require('./app/routers/group')
 var dailyRoute = require('./app/routers/daily')
 var staticRoute = require('./app/routers/static')
 
-var historyApiFallback = require('koa-connect-history-api-fallback')
+// var historyApiFallback = require('koa-connect-history-api-fallback')
 
 // 初始化admin用户
 var U = require('./app/controllers/user')
@@ -31,9 +31,9 @@ const app = new Koa()
 
 onerror(app)
 
-app.use(convert(historyApiFallback({
-	verbose: false
-})))
+// app.use(convert(historyApiFallback({
+// 	verbose: false
+// })))
 
 app.use(favicon(path.join(__dirname, './public/favicon.ico')))
 
