@@ -1,4 +1,3 @@
-var path = require('path')
 var http = require('http')
 var Koa = require('koa')
 var bodyParser = require('koa-bodyparser')
@@ -19,8 +18,9 @@ var userRoute = require('./app/routers/user')
 var groupRoute = require('./app/routers/group')
 var dailyRoute = require('./app/routers/daily')
 var staticRoute = require('./app/routers/static')
+var http = require('http')
 
-// var historyApiFallback = require('koa-connect-history-api-fallback')
+var historyApiFallback = require('koa-connect-history-api-fallback')
 
 // 初始化admin用户
 var U = require('./app/controllers/user')
@@ -31,29 +31,26 @@ const app = new Koa()
 
 onerror(app)
 
-// app.use(convert(historyApiFallback({
-// 	verbose: false
-// })))
+app.use(convert(historyApiFallback({
+	verbose: false
+})))
 
-// app.use(favicon(path.join(__dirname, './public/favicon.ico')))
 app.use(favicon(__dirname + '/public/favicon.ico'))
 
 app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
-	.use(convert(koaStatic(__dirname+ '/views')))
-	.use(views(__dirname+'/views', {
+	.use(convert(koaStatic(__dirname + '/views')))
+	.use(views(__dirname + '/views', {
 		extension: 'html'
 	})) // 配置模板文件目录和后缀名
 	.use(response).use(responseFilter) // 错误处理
-
-console.log(path.join(__dirname, './views'))
 
 // 加载路由
 app.use(userRoute.routes(), userRoute.allowedMethods())
 	.use(groupRoute.routes(), groupRoute.allowedMethods())
 	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
-	.use(staticRoute.routes(), staticRoute.allowedMethods())
+	// .use(staticRoute.routes(), staticRoute.allowedMethods())
 	
 const server = http.createServer(app.callback())
 server.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
