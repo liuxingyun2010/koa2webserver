@@ -41,7 +41,7 @@ app.use(favicon(path.join(__dirname, './public/favicon.ico')))
 app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
-	.use(convert(koaStatic(path.join(__dirname, './views')))
+	.use(convert(koaStatic(path.join(__dirname, './views'))))
 	.use(staticCache(path.join(__dirname, './views'), {
 	  maxAge: 365 * 24 * 60 * 60
 	}))
