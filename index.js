@@ -52,7 +52,7 @@ console.log(path.join(__dirname, './views'))
 app.use(userRoute.routes(), userRoute.allowedMethods())
 	.use(groupRoute.routes(), groupRoute.allowedMethods())
 	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
-	// .use(staticRoute.routes(), staticRoute.allowedMethods())
+	.use(staticRoute.routes(), staticRoute.allowedMethods())
 	
 const server = http.createServer(app.callback())
 server.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
