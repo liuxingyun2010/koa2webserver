@@ -40,7 +40,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'))
 app.use(logger())
 	.use(bodyParser())
 	.use(helmet())
-	// .use(convert(koaStatic(__dirname + './views')))
+	.use(convert(koaStatic(path.join(__dirname, './views'))))
 	.use(views(path.join(__dirname, './views'), {
 		extension: 'html'
 	})) // 配置模板文件目录和后缀名
