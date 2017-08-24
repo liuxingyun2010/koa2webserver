@@ -18,7 +18,6 @@ var userRoute = require('./app/routers/user')
 var groupRoute = require('./app/routers/group')
 var dailyRoute = require('./app/routers/daily')
 var staticRoute = require('./app/routers/static')
-var http = require('http')
 
 var historyApiFallback = require('koa-connect-history-api-fallback')
 
