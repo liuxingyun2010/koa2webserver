@@ -20,6 +20,8 @@ var dailyRoute = require('./app/routers/daily')
 var staticRoute = require('./app/routers/static')
 var http = require('http')
 
+var historyApiFallback = require('koa-connect-history-api-fallback')
+
 // 初始化admin用户
 var U = require('./app/controllers/user')
 U.initUserData()
@@ -28,6 +30,10 @@ U.initUserData()
 const app = new Koa()
 
 onerror(app)
+
+app.use(convert(historyApiFallback({
+	verbose: false
+})))
 
 app.use(favicon(__dirname + '/public/favicon.ico'))
 
@@ -44,7 +50,7 @@ app.use(logger())
 app.use(userRoute.routes(), userRoute.allowedMethods())
 	.use(groupRoute.routes(), groupRoute.allowedMethods())
 	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
-	.use(staticRoute.routes(), staticRoute.allowedMethods())
+	// .use(staticRoute.routes(), staticRoute.allowedMethods())
 	
 const server = http.createServer(app.callback())
 server.listen(port, () => console.log(`✅  The server is running at http://localhost:${port}/`))
