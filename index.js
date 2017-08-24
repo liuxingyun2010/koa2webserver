@@ -47,9 +47,9 @@ app.use(logger())
 	.use(response).use(responseFilter) // 错误处理
 
 // 加载路由
-app.use(userRoute.routes(), userRoute.allowedMethods())
-	.use(groupRoute.routes(), groupRoute.allowedMethods())
-	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
+// app.use(userRoute.routes(), userRoute.allowedMethods())
+// 	.use(groupRoute.routes(), groupRoute.allowedMethods())
+// 	.use(dailyRoute.routes(), dailyRoute.allowedMethods())
 	// .use(staticRoute.routes(), staticRoute.allowedMethods())
 	
 const server = http.createServer(app.callback())
