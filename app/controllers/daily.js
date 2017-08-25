@@ -271,7 +271,7 @@ class DailyController {
 
 		return ctx.success({
 			data: {
-				dayList: _list,
+				dayList: _allDateList,
 				userInfo: _userInfo
 			}
 		})
