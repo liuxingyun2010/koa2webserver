@@ -260,7 +260,9 @@ class DailyController {
 				return value.day == _array.day
 			}) 
 			
-			_findDate && _array.count = _findDate.count
+			if(_findDate){
+				_array.count = _findDate.count
+			}
 
 			_allDateList.unshift(_array)
 
