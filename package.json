@@ -15,7 +15,7 @@
     "homepage": "https://github.com/liuxingyun2010/koa2webserver#readme",
     "scripts": {
         "start": "node index.js",
-        "test": "cross-env NODE_ENV=test nodemon index.js --exec babel-node",
+        "test": "cross-env NODE_ENV=test pm2 start index.js --name daily",
         "dev": "cross-env NODE_ENV=develop nodemon index.js --exec babel-node",
         "build": "cross-env NODE_ENV=production pm2 start index.js --name daily"
     },
