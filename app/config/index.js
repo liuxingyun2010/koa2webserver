@@ -5,7 +5,7 @@ const config = {
 	},
 	test: {
 		port: 3000,
-		connectString: 'mongodb://dbdev:db1234567@127.0.0.1:27017/daily', 
+		connectString: 'mongodb://127.0.0.1:27017/daily', 
 	},
 	develop:{
 		port: 3333,
