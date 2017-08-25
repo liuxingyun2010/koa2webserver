@@ -244,18 +244,26 @@ class DailyController {
 			}])
 			.limit(_defaultPageSize)
 			.sort({
-				day: 1
+				day: -1
 			})
 		
-		let _lastLen = _defaultPageSize - _list.length
+		let _lastLen = _defaultPageSize,
+			_allDateList = []
 		
 		while(_lastLen > 0){
 			let _array = {
 				day: moment().subtract(_defaultPageSize - _lastLen, 'days').format('YYYY-MM-DD'),
 				count: 0
 			}
+			
+			const _findDate = _list.find((value)=>{
+				return value.day == _array.day
+			}) 
+			
+			_findDate && _array.count = _findDate.count
 
-			_list.unshift(_array)
+			_allDateList.unshift(_array)
+
 			_lastLen--
 		}
 
