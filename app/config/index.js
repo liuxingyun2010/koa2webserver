@@ -5,11 +5,11 @@ const config = {
 	},
 	test: {
 		port: 3000,
-		connectString: 'mongodb://127.0.0.1:27017/daily', 
+		connectString: 'mongodb://dev:db1234567@127.0.0.1:27017/daily', 
 	},
 	develop:{
 		port: 3333,
-		connectString: 'mongodb://127.0.0.1:27017/dailydb',
+		connectString: 'mongodb://127.0.0.1:27017/daily',
 	}
 }
 
