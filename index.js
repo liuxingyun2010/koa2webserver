@@ -1,7 +1,7 @@
 var path = require('path')
 var http = require('http')
 
-// koa falimy
+// koa family
 var Koa = require('koa')
 var bodyParser = require('koa-bodyparser')
 var onerror = require('koa-onerror')
