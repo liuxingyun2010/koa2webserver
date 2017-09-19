@@ -37,7 +37,7 @@ app
 		verbose: false
 	})))
 	// favicon
-	// .use(favicon(path.join(__dirname, './public/favicon.ico')))
+	.use(favicon(path.join(__dirname, './public/favicon.ico')))
 	// 日志
 	.use(logger())
 	// post请求
