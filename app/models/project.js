@@ -10,7 +10,7 @@ mongoose.Promise = global.Promise
 * 	status 状态 1:进行中   2：已归档， 3：已删除
 * 	createTime 
 * 	updateTIme
-*/
+*/ 
 
 const ProjectSchema = new Schema({
     name: {
