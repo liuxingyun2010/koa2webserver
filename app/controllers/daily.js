@@ -29,6 +29,8 @@ class DailyController {
 	static async add(ctx) {
 		const _record = ctx.request.body.record,
 			_progress = ctx.request.body.progress,
+			_pid = ctx.request.body.pid || '',
+			_pname = ctx.request.body.pname || '',
 			_uid = this.isAuthOp(ctx).id,
 			_gid = this.isAuthOp(ctx).gid
 
@@ -44,6 +46,12 @@ class DailyController {
 			})
 		}
 
+		if(!_pid !== !_pname){
+			return ctx.error({
+				msg: '项目id或者名称不能为空'
+			})
+		}
+
 		const _today = moment().format('YYYY-MM-DD')
 		const _findDaily = await Daily.findOne({
 			uid: _uid,
@@ -53,6 +61,8 @@ class DailyController {
 		let _dailyInfo = {
 			record: _record,
 			progress: _progress,
+			pid: _pid,
+			pname: _pname
 		}
 
 		if (_findDaily) {
@@ -78,6 +88,8 @@ class DailyController {
 
 		delete _dailyInfo.record
 		delete _dailyInfo.progress
+		delete _dailyInfo.pid
+		delete _dailyInfo.pname
 
 		_dailyInfo = {
 			uid: _uid,
@@ -85,7 +97,9 @@ class DailyController {
 			gid: _gid,
 			dailyList: [{
 				record: _record,
-				progress: _progress
+				progress: _progress,
+				pid: _pid,
+				pname: _pname
 			}]
 		}
 
@@ -127,10 +141,13 @@ class DailyController {
 
 	// 按照日期和分组查询列表数据
 	static async dailyList(ctx) {
-		//daily/list/:gid/:date/:page?
-		let _pageNum = ctx.params.pageNum || 1,
-			_gid = ctx.params.gid || 'all',
-			_date = ctx.params.date || '0',
+		//daily/list?gid=1&date=1&pid=1&pageNum=1
+		const _search = ctx.query
+
+		let _pageNum = _search.pageNum || 1,
+			_gid = _search.gid || 'all',
+			_date = _search.date || '0',
+			_pid = _search.pid || '',
 			_myuid = this.isAuthOp(ctx).id,
 			_defaultPageSize = 100 //默认分页数
 
@@ -140,7 +157,10 @@ class DailyController {
 		if (_gid !== 'all') {
 			_selectSql.gid = _gid
 		}
-
+		 
+		if (_pid) {
+			_selectSql['dailyList.pid'] = _pid
+		}
 
 		let _today = moment()
 
@@ -289,6 +309,8 @@ class DailyController {
 
 		const _record = ctx.request.body.record,
 			_progress = ctx.request.body.progress,
+			_pid = ctx.request.body.pid || '',
+			_pname = ctx.request.body.pname || '',
 			_uid = this.isAuthOp(ctx).id
 
 		if (!_record || _progress === undefined) {
@@ -305,7 +327,9 @@ class DailyController {
 			}, {
 				$set: {
 					'dailyList.$.progress': _progress,
-					'dailyList.$.record': _record
+					'dailyList.$.record': _record,
+					'dailyList.$.pid': _pid,
+					'dailyList.$.pname': _pname
 				}
 			})
 

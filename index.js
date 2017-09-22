@@ -20,7 +20,6 @@ var router = require('./app/routers/')
 var response = require('./app/middlewares/response')
 var responseFilter = require('./app/middlewares/responseFilter')
 var port = require('./app/config').port
-var router = require('./app/routers')
 
 // 初始化admin用户
 var initUser = require('./app/controllers/user')
@@ -32,10 +31,10 @@ const app = new Koa()
 onerror(app)
 
 app
-	// history router 指向根目录
-	.use(convert(historyApiFallback({
-		verbose: false
-	})))
+	// // history router 指向根目录
+	// .use(convert(historyApiFallback({
+	// 	verbose: false
+	// })))
 	// favicon
 	.use(favicon(path.join(__dirname, './public/favicon.ico')))
 	// 日志

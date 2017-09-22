@@ -11,7 +11,9 @@ mongoose.Promise = global.Promise
 *	uid 用户id
 * 	today 日期
 * 	createTime 
-* 	updateTIme
+* 	updateTIme,
+*   pid项目id
+*   pname项目名称
 */
 
 const DailySchema = new Schema({
@@ -39,6 +41,14 @@ const DailySchema = new Schema({
             type: Number,
             default: 0,
             required: true
+        },
+        pid: {
+            type: String,
+            default: ''
+        },
+        pname: {
+            type: String,
+            default: ''
         }
     }],
     createTime: {

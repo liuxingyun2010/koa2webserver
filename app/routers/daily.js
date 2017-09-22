@@ -13,7 +13,7 @@ router.prefix(`/${baseApi}/${api}`)
 router
 	.post('/add',jwt, dailyHandler.add)
 	.get('/info/:date?/:uid?',jwt, dailyHandler.dailyInfo)
-	.get('/list/:gid/:date?',jwt, dailyHandler.dailyList)
+	.get('/list',jwt, dailyHandler.dailyList)
 	.put('/update/:id',jwt, dailyHandler.dailyUpdate)
 	.del('/remove/:id',jwt, dailyHandler.dailyRemove)
 	.get('/user/:pageNum/:uid?',jwt, dailyHandler.dailyListByUser)
