@@ -1,6 +1,6 @@
 const config = {
 	production: {
-		port: 80,
+		port: 8080,
 		connectString: 'mongodb://dev:dev1qaz2wsx@127.0.0.1:27017/daily'
 	},
 	test: {
